@@ -47,15 +47,15 @@ class ViewController: UIViewController, StatefulViewController {
         // Fake network call
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
             // Success
-//            self.dataArray = ["Merlot", "Sauvignon Blanc", "Blaufränkisch", "Pinot Nior"]
-//            self.tableView.reloadData()
-//            self.endLoading(error: nil, completion: {
-//                print("completion endLoading -> loadingState: \(self.currentState.rawValue)")
-//            })
-//            print("endLoading -> loadingState: \(self.lastState.rawValue)")
+            self.dataArray = ["Merlot", "Sauvignon Blanc", "Blaufränkisch", "Pinot Nior"]
+            self.tableView.reloadData()
+            self.endLoading(error: nil, completion: {
+                print("completion endLoading -> loadingState: \(self.currentState.rawValue)")
+            })
+            print("endLoading -> loadingState: \(self.lastState.rawValue)")
             
             // Error
-            self.endLoading(error: NSError(domain: "foo", code: -1, userInfo: nil))
+            //self.endLoading(error: NSError(domain: "foo", code: -1, userInfo: nil))
             
             // No Content
             //self.endLoading(error: nil)
