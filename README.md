@@ -30,7 +30,8 @@ Current Swift compatibility breakdown:
 
 | Swift Version | Framework Version |
 | ------------- | ----------------- |
-| 3.0           | 3.x               |
+| 4.2           | 4.x               |
+| 3.0 - 4.1     | 3.x               |
 | 2.3           | 2.x               |
 | 2.2           | 1.x               |
 
