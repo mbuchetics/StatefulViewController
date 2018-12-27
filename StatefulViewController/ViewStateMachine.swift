@@ -53,6 +53,27 @@ public class ViewStateMachine {
 
     /// The view that should act as the superview for any added views
     public let view: UIView
+
+    /// This store includes the views, who should be in the front during the specific state (Key)
+    public var foregroundViewStore: [StatefulViewControllerState: Set<UIView>]? = nil {
+        didSet {
+            view.bringSubviewToFront(containerView) // Reset to the default order
+
+            if let foregroundViewStore = foregroundViewStore {
+                switch currentState {
+                case .none: break
+                case .view(let stateKey):
+
+                    // Bring all stored views for the state to the front
+                    if let state = StatefulViewControllerState(rawValue: stateKey), let foregroundViews = foregroundViewStore[state] {
+                        for foregroundView in foregroundViews {
+                            view.bringSubviewToFront(foregroundView)
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     /// The current display state of views
     public fileprivate(set) var currentState: ViewStateMachineState = .none
@@ -183,6 +204,14 @@ public class ViewStateMachine {
             containerView.addConstraints(hConstraints)
             containerView.addConstraints(vConstraints)
 		}
+
+        // Bring all views from the foregroundViewStore, stored for the specific state, to the front
+        if let state = StatefulViewControllerState(rawValue: state), let foregroundViewStore = foregroundViewStore, let foregroundViews = foregroundViewStore[state] {
+
+            for foregroundView in foregroundViews {
+                view.bringSubviewToFront(foregroundView)
+            }
+        }
 
 		let animations: () -> () = {
 			if let newView = store[state] {

@@ -58,7 +58,11 @@ extension StatefulViewController {
         get { return placeholderView(.empty) }
         set { setPlaceholderView(newValue, forState: .empty) }
     }
-    
+
+    public var foregroundViewStore: [StatefulViewControllerState: Set<UIView>]? {
+        get { return getForegroundStore() }
+        set { setForegroundViewStore(newValue) }
+    }
     
     // MARK: Transitions
     
@@ -117,6 +121,14 @@ extension StatefulViewController {
     
     fileprivate func setPlaceholderView(_ view: UIView?, forState state: StatefulViewControllerState) {
         stateMachine[state.rawValue] = view
+    }
+
+    fileprivate func getForegroundStore() -> [StatefulViewControllerState: Set<UIView>]? {
+        return stateMachine.foregroundViewStore
+    }
+
+    fileprivate func setForegroundViewStore(_ store: [StatefulViewControllerState: Set<UIView>]?) {
+        stateMachine.foregroundViewStore = store
     }
 }
 

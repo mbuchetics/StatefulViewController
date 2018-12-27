@@ -42,7 +42,9 @@ public protocol StatefulViewController: class, BackingViewProvider {
     /// The empty view is shown when the `hasContent` method returns false
     var emptyView: UIView? { get set }
 
-    
+    /// This store includes the views, who should be in the front during the specific state (Key)
+    var foregroundViewStore: [StatefulViewControllerState: Set<UIView>]? { get set }
+
     // MARK: Transitions
 
     /// Sets up the initial state of the view.
