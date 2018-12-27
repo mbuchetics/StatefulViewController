@@ -41,7 +41,10 @@ class ForegroundViewStoreViewController: UIViewController, StatefulViewControlle
         failureView.tapGestureRecognizer.addTarget(self, action: #selector(refresh))
         errorView = failureView
 
-        foregroundViewStore = [StatefulViewControllerState.empty: [addButton]]
+        foregroundViewStore = [
+            .empty: [addButton],
+            .error: [addButton]
+        ]
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -89,11 +92,11 @@ class ForegroundViewStoreViewController: UIViewController, StatefulViewControlle
     }
     
     @IBAction func onDeleteButton(_ sender: Any) {
-        foregroundViewStore?[StatefulViewControllerState.empty]?.remove(deleteButton)
+        foregroundViewStore?[.empty]?.remove(deleteButton)
     }
 
     @IBAction func onAddButton(_ sender: Any) {
-        foregroundViewStore?[StatefulViewControllerState.empty]?.insert(deleteButton)
+        foregroundViewStore?[.empty]?.insert(deleteButton)
     }
 }
 
