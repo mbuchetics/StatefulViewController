@@ -130,6 +130,25 @@ class MyPlaceholderView: UIView, StatefulPlaceholderView {
 
 
 
+### ForegroundViewStore
+
+Per default, StatefulViewController presents the placeholder views above all other views. In case other views, like some buttons, should be above the placholder in some states, you can assign a dictionary `[StatefulViewControllerState: Set<UIView>]` to the `foregroundViewStore` property.
+
+```swift
+foregroundViewStore = [
+    .empty: [button1, button2],
+    .error: [button1]
+]
+```
+
+You can also update the `foregroundViewStore` later:
+
+```swift
+foregroundViewStore?[.empty]?.remove(button1)
+foregroundViewStore?[.loading]?.insert(button3)
+```
+
+
 <a name="viewstatemachine"></a>
 
 ### View State Machine
