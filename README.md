@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/aschuch/StatefulViewController.svg)](https://travis-ci.org/aschuch/StatefulViewController)
 ![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)
-![Swift 3.0](https://img.shields.io/badge/Swift-3.0-orange.svg)
+![Swift 5.0](https://img.shields.io/badge/Swift-5.0-orange.svg)
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20tvOS-lightgrey.svg)
 
 A protocol to enable `UIViewController`s or `UIView`s to present placeholder views based on content, loading, error or empty states.
@@ -30,6 +30,7 @@ Current Swift compatibility breakdown:
 
 | Swift Version | Framework Version |
 | ------------- | ----------------- |
+| 5.0           | 5.x               |
 | 4.2           | 4.x               |
 | 3.0 - 4.1     | 3.x               |
 | 2.3           | 2.x               |
@@ -182,20 +183,10 @@ stateMachine.transitionToState(.None, animated: true) {
 Add the following line to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile).
 
 ```
-github "aschuch/StatefulViewController" ~> 3.0
+github "aschuch/StatefulViewController" ~> 5.0
 ```
 
 Then run `carthage update`.
-
-#### CocoaPods
-
-Add the following line to your Podfile.
-
-```
-pod "StatefulViewController", "~> 3.0"
-```
-
-Then run `pod install` with CocoaPods 0.36 or newer.
 
 #### Manually
 
