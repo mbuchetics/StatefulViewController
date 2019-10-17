@@ -58,7 +58,11 @@ extension StatefulViewController {
         get { return placeholderView(.empty) }
         set { setPlaceholderView(newValue, forState: .empty) }
     }
-    
+
+    public var foregroundViewStore: [StatefulViewControllerState: [UIView]]? {
+        get { return getForegroundStore() }
+        set { setForegroundViewStore(newValue) }
+    }
     
     // MARK: Transitions
     
@@ -118,6 +122,20 @@ extension StatefulViewController {
     fileprivate func setPlaceholderView(_ view: UIView?, forState state: StatefulViewControllerState) {
         stateMachine[state.rawValue] = view
     }
+
+    fileprivate func getForegroundStore() -> [StatefulViewControllerState: [UIView]]? {
+        return stateMachine.foregroundViewStore
+    }
+
+    fileprivate func setForegroundViewStore(_ store: [StatefulViewControllerState: [UIView]]?) {
+        var tempStore = store
+
+        store?.forEach { (state, views) in
+            tempStore?[state]?.removeDuplicates()
+        }
+
+        stateMachine.foregroundViewStore = tempStore
+    }
 }
 
 
@@ -132,4 +150,18 @@ private func associatedObject<T: AnyObject>(_ host: AnyObject, key: UnsafeRawPoi
         objc_setAssociatedObject(host, key, value, .OBJC_ASSOCIATION_RETAIN)
     }
     return value!
+}
+
+extension Array where Element: Hashable {
+    func removingDuplicates() -> [Element] {
+        var addedDict = [Element: Bool]()
+
+        return filter {
+            addedDict.updateValue(true, forKey: $0) == nil
+        }
+    }
+
+    mutating func removeDuplicates() {
+        self = self.removingDuplicates()
+    }
 }

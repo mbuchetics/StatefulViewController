@@ -53,6 +53,23 @@ public class ViewStateMachine {
 
     /// The view that should act as the superview for any added views
     public let view: UIView
+
+    /// This store includes the views, who should be in the front during the specific state (Key)
+    public var foregroundViewStore: [StatefulViewControllerState: [UIView]]? = nil {
+        didSet {
+            view.bringSubviewToFront(containerView) // Reset to the default order
+
+            if foregroundViewStore != nil {
+                switch currentState {
+                case .none: break
+                case .view(let stateKey):
+
+                    // Bring all stored views for the state to the front
+                    bringForegroundViewStoreToFront(for: stateKey)
+                }
+            }
+        }
+    }
     
     /// The current display state of views
     public fileprivate(set) var currentState: ViewStateMachineState = .none
@@ -176,13 +193,16 @@ public class ViewStateMachine {
             newView.translatesAutoresizingMaskIntoConstraints = false
             containerView.addSubview(newView)
 
-            let metrics = ["top": insets.top, "bottom": insets.bottom, "left": insets.left, "right": insets.right]
-            let views = ["view": newView]
-            let hConstraints = NSLayoutConstraint.constraints(withVisualFormat: "|-left-[view]-right-|", options: [], metrics: metrics, views: views)
-            let vConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|-top-[view]-bottom-|", options: [], metrics: metrics, views: views)
-            containerView.addConstraints(hConstraints)
-            containerView.addConstraints(vConstraints)
+            NSLayoutConstraint.activate([
+                newView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: insets.right),
+                newView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: insets.bottom),
+                newView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: insets.top),
+                newView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: insets.left)
+            ])
 		}
+
+        // Bring all views from the foregroundViewStore, stored for the specific state, to the front
+        bringForegroundViewStoreToFront(for: state)
 
 		let animations: () -> () = {
 			if let newView = store[state] {
@@ -202,6 +222,17 @@ public class ViewStateMachine {
 
 		animateChanges(animated: animated, animations: animations, completion: animationCompletion)
 	}
+
+    private func bringForegroundViewStoreToFront(for state: String) {
+        if let stateFulVCState = StatefulViewControllerState(rawValue: state),
+            let foregroundViewStore = foregroundViewStore,
+            let foregroundViews = foregroundViewStore[stateFulVCState] {
+
+            for foregroundView in foregroundViews {
+                view.bringSubviewToFront(foregroundView)
+            }
+        }
+    }
 
     fileprivate func hideAllViews(animated: Bool, completion: (() -> ())? = nil) {
         let store = viewStore
